@@ -1,0 +1,66 @@
+1.- Situarse en la carpeta del repositorio.
+
+2.- Poner en la consola $ npm create vite@latest client (React,JavaScript,Yes)
+
+3.- Para el back --> abrimos otra consola y situados en la misma carpeta :
+
+4.- $ express --view=ejs server
+
+5.- Preparamos el server:
+
+6.- cd server
+
+7.- Limpiar (desinstalar ejs) y adoptar server a ECMA6
+    - en la carpeta server 
+        $ npm uninstall ejs
+    - instalar las librerías que viene por defecto
+        $ npm i 
+    - instalar las librerías que necesitamos  
+        $ npm i multer bcrypt mysql2 jsonwebtoken cors zod dotenv
+    -adaptar el código  
+        en el package.json --> "type":"module" linea que convierte el back en ecma6 y permite import y export.
+    - cambiar los require por import y los module.export por export (de www y app)
+    - eliminar la carpeta views, ya que este server no manda vistas, es una API rest
+    - en www ->     import app from '../app.js';
+                    import debugLib from 'debug';
+                    import http from 'http';
+                    import dotenv from 'dotenv';
+
+                    dotenv.config()
+
+                    const debug = debugLib('server:server');
+    
+    - en app ->     import createError from 'http-errors';
+                    import express from 'express';
+                    import path from 'path';
+                    import cookieParser from 'cookie-parser';
+                    import logger from 'morgan';
+                    import cors from 'cors';
+                    import { fileURLToPath } from 'url';
+
+                    const __filename = fileURLToPath(import.meta.url);
+                    const __dirname = path.dirname(__filename);
+
+                    (y poner en middlewares --> app.use(cors());)
+
+
+8.- Borrar la carpeta routes(la arquitectura va a ser diferente)
+
+9.- Creamos una carpeta modules dentro de la cual camos a tener un módulo (rutas, controladores y dal) por cada entidad de la aplicación.
+
+10.- Creamos la carpeta config (base de datos), helpers (para funcionalidades de ayuda), middlewares (multer,verifyToken..).
+
+10/1 .- Creamos el archivo ".env" para las variables de entorno
+
+11.- En package.json añadir en los scripts la linea "dev": "nodemon ./bin/www"
+
+12.- Preparar la base de datos y preparamos la conexion a la base de datos desde el back(config(db.js))
+
+13.- En el front::: se limpian los css y el app.jsx
+
+14.- Instalamos librerias:
+     $ npm i react-router zod react-bootstrap bootstrap axios (el import de bootstrap lo ponemos en el main)
+
+15.- Para hacer lazyload hay que exportar los componentes por defecto.
+    -los css de las paginas puestas con lazy se cargan al cargar las paginas asociadas. pero al pasar a otra se siguen quedando cargadas.
+

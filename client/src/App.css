@@ -1,0 +1,21 @@
+html,
+body {
+  min-block-size: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+main {
+  flex: 1;
+  min-block-size: 84.85vh;
+}
+
+footer {
+  block-size: 100px;
+  background-color: grey;
+}
+
+.errMsg {
+  color: red;
+  font-size: 12px;
+}
