@@ -1,11 +1,12 @@
 import { Outlet } from "react-router"
+import { NavbarUser } from "../components/NavbarUser/NavbarUser"
 
 
 export const UserLayout = () => {
   return (
     <>
       <header>
-        Navbar usuario
+        <NavbarUser/>
       </header>
       <main>
         <Outlet/>

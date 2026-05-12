@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button, Form } from "react-bootstrap"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { validateForm } from "../../../../helpers/ValidateForms"
 import { RegisterSchema } from "../../../../schemas/RegisterSchema"
 import { fetchAxios } from "../../../../helpers/axiosHelper"
@@ -18,6 +18,8 @@ const RegisterPage = () => {
 
   const [register, setRegister] = useState(initialValue);
   const [errorsVal, setErrorsVal] = useState();
+  const [otroError, setOtroError] = useState("");
+  const navigate = useNavigate();
   
   const handleChange = (e)=>{
     const {name,value} = e.target
@@ -26,28 +28,34 @@ const RegisterPage = () => {
 
 
   const onSubmit = async() => {
+    setErrorsVal({});
+    setOtroError("");
     try {
       //1 validar
       validateForm(RegisterSchema,register)
 
-      let url = "http://localhost:5000/api/users/register"
+      let url = "/users/register"
       //2 enviar al back
       let res = await fetchAxios(url,"POST",register);
-      console.log("respueste----",res);
+      console.log(res);
+      navigate('/login');
       
     } catch (error) {
       if (error.errType === "validator") {
         console.log("errores de validación");
         setErrorsVal(error)  
+      }else if (error.response.data.errno === 1062){
+        setOtroError("Email duplicado");
+        
       }else {
-
-        console.log("otro tipo de errores");
+        setOtroError("Ups, ha habido un error")
       }
       
     }
     
   }
-  console.log(register);
+  
+
   
 
   return (
@@ -118,8 +126,9 @@ const RegisterPage = () => {
       
       <div className="d-flex gap-2" >
         <Button onClick={onSubmit} >Submit</Button>
-        <Button> Cancelar</Button>
+        <Button onClick={()=> navigate(-1)}> Cancelar</Button>
       </div>
+      <p className="errMsg">{otroError}</p>
       <p>¿Ya estás registrado? <Link to='/login'>Login aquí</Link></p>
     </Form>
     </div>

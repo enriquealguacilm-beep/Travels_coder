@@ -1,18 +1,23 @@
 html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
 body {
-  min-block-size: 100vh;
+  min-height: 100vh;
+}
+#root {
   display: flex;
   flex-direction: column;
-  margin: 0;
+  min-height: 100vh;
 }
 main {
   flex: 1;
-  min-block-size: 84.85vh;
 }
-
 footer {
-  block-size: 100px;
-  background-color: grey;
+  height: 100px;
+  background-color: rgb(158, 158, 158);
 }
 
 .errMsg {
