@@ -14,7 +14,7 @@ const LoginPage = () => {
 
   const [loginData, setLoginData] = useState(initialValue);
   const [errLogin, setErrLogin] = useState("");
-  const {setUser, setToken} = useContext(AuthContext)
+  const {setUser, setToken, setTravels} = useContext(AuthContext)
   const navigate = useNavigate();
 
   
@@ -40,6 +40,7 @@ const LoginPage = () => {
       let urlUser = "/users/userById";
       let resUser = await fetchAxios(urlUser,"GET", null, tokenDelBack);
       setUser(resUser.data.user);
+      setTravels(resUser.data.travels);
       setToken(tokenDelBack);
 
       console.log(resUser);

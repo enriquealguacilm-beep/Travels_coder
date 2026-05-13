@@ -25,7 +25,16 @@ class UserDal {
 
   userById = async(id)=> {
     try {
-      let sql = 'SELECT * FROM user WHERE user_id = ? AND user_is_deleted = 0';
+      let sql = `SELECT
+          u.user_id, u.name, u.lastname, u.address, u.phone, u.email, u.avatar, u.role,
+          t.travel_id, t.title, t.country, t.city, t.description, t.travel_date
+          FROM user u
+          LEFT JOIN travel t
+          ON u.user_id = t.user_id
+          AND u.user_is_deleted = 0
+          AND t.travel_is_deleted = 0
+          WHERE u.user_id = ?
+      `
       return await executeQuery(sql, [id]);
 
     } catch (error) {

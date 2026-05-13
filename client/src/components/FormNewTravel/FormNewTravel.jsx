@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { fetchAxios } from "../../helpers/axiosHelper";
+import { AuthContext } from "../../context/AuthContext";
 
 
 const initialValue = {
@@ -7,19 +9,50 @@ const initialValue = {
   country:"",
   city:"",
   description:"",
-  date:""
+  travel_date:""
 }
 
 
 export const FormNewTravel = ({ setShowForm }) => {
 
   const [newTravel, setNewTravel] = useState(initialValue);
-  /* const [images, setImages] = useState(); */
+  const [images, setImages] = useState(); 
+  const {user,token, setTravels, travels} = useContext(AuthContext);
 
   const handleChange = (e) => {
-    const {name,value} = e.target;
-    setNewTravel({...newTravel, [name]:value})
+    if (e.target.type === "file"){
+      setImages(e.target.files)
+    }
+    else {
+      const {name,value} = e.target;
+      setNewTravel({...newTravel, [name]:value})
+    }
+    
   }
+
+  const onSubmit = async() => {
+    //validar campos con zod
+    const newFormData = new FormData();
+    newFormData.append("newTravel",JSON.stringify(newTravel));
+    if(images){
+      for(const elem of images){
+        newFormData.append("img", elem);
+      }
+    }
+
+    try {
+      const res = await fetchAxios(`/travels/newTravel/${user.user_id}`, "POST", newFormData, token);
+      console.log("-----------------------------------------",res);
+      setShowForm(false);
+      setTravels([...travels, {...newTravel, user_id: user.user_id, travel_id:res.data.travel_id}])
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+  }
+
 
   return (
     <Form className="w-50">
@@ -69,19 +102,23 @@ export const FormNewTravel = ({ setShowForm }) => {
           type="date" 
           placeholder="Date" 
           onChange={handleChange}
-          name="date"
-          value={newTravel.date}/>
+          name="travel_date"
+          value={newTravel.travel_date}/>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicCountry">
         <Form.Label>Sube tus imagenes</Form.Label>
         <Form.Control 
           type="file" 
+          onChange={handleChange}
           multiple />
       </Form.Group>
 
       <div className="d-flex gap-2">
-        <Button variant="primary">
+        <Button 
+          variant="primary"
+          onClick={onSubmit}
+          >
           Submit
         </Button>
         <Button 

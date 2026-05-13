@@ -6,6 +6,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import { FormNewTravel } from '../../../components/FormNewTravel/FormNewTravel';
+import { TravelProfileGal } from '../../../components/TravelProfileGal/TravelProfileGal';
 
 const ProfilePage = () => {
 
@@ -37,6 +38,9 @@ const ProfilePage = () => {
         disabled= {showForm}
         >Crear viaje</Button>
         {showForm && <FormNewTravel setShowForm = {setShowForm}/>}
+        </div>
+        <div>
+          {!showForm && <TravelProfileGal/>}
         </div>
     </div>
   )

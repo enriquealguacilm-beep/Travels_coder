@@ -67,8 +67,39 @@ class UserController{
       try {
         const {user_id } = req;
         const result = await userDal.userById(user_id);
+        console.log("--------------------------",result);
+        
+        let user= {
+          user_id,
+          name: result[0].name,
+          lastname: result[0].lastname,
+          address: result[0].addres,
+          phone: result[0].phone,
+          email: result[0].email,
+          avatar: result[0].avatar,
+          role: result[0].role
+        }
 
-        res.status(200).json({user:result[0]});
+        let travels = []
+
+      
+        result.forEach(elem => {
+          let viaje = {
+            user_id,
+            travel_id: elem.travel_id,
+            title: elem.title,
+            country: elem.country,
+            city: elem.city,
+            description: elem.description,
+            travel_date: elem.travel_date
+          }
+          if (elem.travel_id){
+            travels.push(viaje);
+          }
+        })
+
+
+        res.status(200).json({user, travels});
         
       } catch (error) {
         console.log(error);
