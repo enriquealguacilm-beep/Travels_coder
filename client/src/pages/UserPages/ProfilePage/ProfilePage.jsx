@@ -25,15 +25,18 @@ const ProfilePage = () => {
           <h3>Dirección: {user.address}</h3>
           <h3>Teléfono: {user.phone}</h3>
           <div className='d-flex gap-2'>
-            <Button onClick={()=> navigate('/editUser')}>Editar</Button>
-            <Button>Eliminar</Button>
+            <Button onClick={user.role===1?()=> navigate('/editUser'):()=>navigate('/editAdmin')}>Editar</Button>
+            {user.role !== 2&&<Button>Eliminar</Button>}
           </div>
         </div>
         <div className='profile-img'>
           <img src={user.avatar?`${import.meta.env.VITE_SERVER_IMAGES_URL}/users/${user.avatar}`:userDefault}/>
         </div>
       </div>
-      <div className='p-5'>
+
+      {user.role !==2 && (
+        <>
+        <div className='p-5'>
         <Button onClick={()=> setShowForm(true)}
         disabled= {showForm}
         >Crear viaje</Button>
@@ -42,6 +45,11 @@ const ProfilePage = () => {
         <div>
           {!showForm && <TravelProfileGal/>}
         </div>
+        </>
+      )}
+      
+
+
     </div>
   )
 }

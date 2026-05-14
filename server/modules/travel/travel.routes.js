@@ -9,6 +9,12 @@ router.post('/newTravel/:user_id', verifyToken ,uploadImages("travel"),travelCon
 
 router.put('/editTravel', verifyToken, travelController.editTravel);
 
-router.get('/picsByTravel/:travel_id', verifyToken, travelController.picsByTravel)
+router.get('/picsByTravel/:travel_id', verifyToken, travelController.picsByTravel);
+
+router.delete('/delPic/:image_id/:travel_id/:file',verifyToken,travelController.delPic);
+
+router.post('/addPics/:travel_id', verifyToken, uploadImages("travel"),travelController.addPics);
+
+router.put('/delLogicTravel', verifyToken, travelController.delLogicTravel);
 
 export default router;

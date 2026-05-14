@@ -33,7 +33,7 @@ class UserController{
         const {email, password} = req.body;
         //1.ver si el usuario existe
         const result = await userDal.findUserbyEmail(email)
-        console.log("*************", result);
+        
         if (!result.length) {
           res.status(401).json({message:"Email no existe"})
         }
@@ -67,7 +67,7 @@ class UserController{
       try {
         const {user_id } = req;
         const result = await userDal.userById(user_id);
-        console.log("--------------------------",result);
+        
         
         let user= {
           user_id,

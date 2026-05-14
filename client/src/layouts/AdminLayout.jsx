@@ -1,10 +1,11 @@
 import { Outlet } from "react-router"
+import { NavbarAdmin } from "../components/NavbarAdmin/NavbarAdmin"
 
 export const AdminLayout = () => {
   return (
     <>
       <header>
-        Navbar admin
+        <NavbarAdmin/>
       </header>
       <main>
         <Outlet/>

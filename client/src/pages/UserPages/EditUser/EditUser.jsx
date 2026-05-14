@@ -46,7 +46,7 @@ const EditUser = () => {
       else{
         setUser(editUser)
       }
-      navigate('/userProfile')
+      navigate(user.role === 1 ? '/userProfile': '/adminProfile')
       
     } catch (error) {
       console.log(error);
@@ -118,7 +118,7 @@ const EditUser = () => {
       
       <div className="d-flex gap-2" >
         <Button onClick={onSubmit} >Submit</Button>
-        <Button > Cancelar</Button>
+        <Button onClick={()=>navigate(user.role === 1 ? '/userProfile': '/adminProfile')}> Cancelar</Button>
       </div>
       
     </Form>

@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { Outlet, useNavigate } from "react-router"
+import { Navigate, Outlet, useNavigate } from "react-router"
 
 
 export const PrivateRoutes = ({user, requiredRole}) => {
@@ -19,7 +19,7 @@ export const PrivateRoutes = ({user, requiredRole}) => {
   },[user])
   return (
     <>
-      <Outlet/>
+     {user?.role == requiredRole ? <Outlet/>: <Navigate to= '/'/>}
     </>
   )
 }

@@ -54,8 +54,61 @@ class TravelDal{
 
   picsByTravel = async(travel_id) => {
     try {
-      let sql = 'SELECT * FROM images WHERE travel_id = ?';
+      let sql = 'SELECT * FROM images WHERE travel_id = ? AND image_is_deleted = 0';
       return await executeQuery(sql,[travel_id])
+    } catch (error) {
+      throw error
+    }
+  }
+
+
+  deletePic = async(values) => {
+    try {
+      let sql = 'DELETE FROM images WHERE image_id = ? AND travel_id = ?';
+      await executeQuery(sql, values);
+    } catch (error) {
+      throw error
+    }
+  }
+
+  addPics = async(travel_id, files) => {
+    const connection = await dbPool.getConnection();
+    try {
+      await connection.beginTransaction();
+      //averiguar cualk es el mayor image_id para saber por donde tengo que seguir guardando
+        let sqlMaxId =`SELECT IFNULL(MAX(image_id), 0) AS max_id FROM images WHERE travel_id = ?`;
+        const [result] = await connection.query(sqlMaxId, [travel_id]);
+        let {max_id} = result[0];
+
+        //inserción de las fotos
+        files.forEach(async(elem) => {
+          max_id++;
+          let sqlImage = `INSERT INTO images (image_id, travel_id, file) VALUES (?,?,?)`;
+          await connection.query(sqlImage,[max_id, travel_id, elem.filename])
+        })
+        
+        //pedir a la base de datos las imagenes actualizadas para este viaje
+        let sqlNewPics = 'SELECT * FROM images WHERE travel_id = ?';
+        const [resultNewPics] = await connection.query(sqlNewPics,[travel_id]);
+        
+        await connection.commit()
+        return resultNewPics;
+    } catch (error) {
+        await connection.rollback();
+        throw error
+    } finally{
+      connection.release();
+    }
+  }
+
+  delLogicTravel = async(travel_id) => {
+    try {
+      let sql = `UPDATE travel t LEFT JOIN images i 
+                ON t.travel_id = i.travel_id
+                SET t.travel_is_deleted = 1,
+                i.image_is_deleted = 1 
+                WHERE t.travel_id = ?`;
+      await executeQuery(sql, [travel_id]); 
     } catch (error) {
       throw error
     }
